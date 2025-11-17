@@ -1,12 +1,20 @@
 import { Router } from "express";
-import { activateUser, deleteUser, getAll, login, register } from "../controller/auth.controller.js";
+import { validate } from "../middlewares/validate.js";
+import { AuthController } from "../controllers/auth.controller.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { verifyOtpSchema, resendOtpSchema } from "../validations/auth.validation.js";
 
-const UserRouter = Router()
+const router = Router();
 
-UserRouter.post("/register", register)
-UserRouter.post("/activate", activateUser)
-UserRouter.post("/login", login)
-UserRouter.get("/users", getAll)
-UserRouter.delete("/users/:id", deleteUser)
+// Public routes
+router.post("/register", AuthController.register);
+router.post("/verify-otp", validate(verifyOtpSchema), AuthController.verifyOtp);
+router.post("/resend-otp", validate(resendOtpSchema), AuthController.resendOtp);
+router.post("/login", AuthController.login);
 
-export default UserRouter
+// Private routes
+router.get("/me", authMiddleware, AuthController.myProfile);
+router.post("/logout", authMiddleware, AuthController.logout);
+router.post("/refresh-token", AuthController.refreshToken);
+
+export { router as authRouter };

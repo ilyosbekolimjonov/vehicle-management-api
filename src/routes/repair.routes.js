@@ -1,18 +1,12 @@
 import { Router } from "express";
-import {
-    addRepair,
-    getAllRepairs,
-    getSingleRepair,
-    editRepair,
-    removeRepair
-} from "../controllers/repair.controller.js";
+import { RepairController } from "../controllers/repair.controller.js";
 
 const router = Router();
 
-router.post("/", addRepair);
-router.get("/", getAllRepairs);
-router.get("/:id", getSingleRepair);
-router.put("/:id", editRepair);
-router.delete("/:id", removeRepair);
+router.post("/", RepairController.addRepair);
+router.get("/", RepairController.getAllRepairs);
+router.get("/:id", RepairController.getSingleRepair);
+router.put("/:id", RepairController.editRepair);
+router.delete("/:id", RepairController.removeRepair);
 
 export { router as repairRouter };

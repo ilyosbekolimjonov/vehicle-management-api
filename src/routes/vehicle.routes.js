@@ -7,9 +7,6 @@ import { checkRole } from "../middlewares/checkRole.js";
 
 const router = Router();
 
-// PUBLIC yoki PROTECTED — loyihangga qarab
-// Bu yerda barcha CRUD uchun JWT kerak deb olamiz
-
 router.post("/", authMiddleware, checkRole(["admin"]), validate(createVehicleSchema), VehiclesController.create);
 router.get("/", authMiddleware, VehiclesController.getAll);
 router.get("/:id", authMiddleware, VehiclesController.getById);

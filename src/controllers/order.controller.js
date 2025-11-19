@@ -1,9 +1,6 @@
 import orderService from "../services/order.service.js";
 
 export default {
-    
-    // CREATE ORDER
-    
     async create(req, res, next) {
         try {
             const data = req.body;
@@ -18,9 +15,6 @@ export default {
             next(error);
         }
     },
-
-    
-    // GET ALL
     
     async getAll(req, res, next) {
         try {
@@ -34,9 +28,6 @@ export default {
         }
     },
 
-    
-    // GET BY ID
-    
     async getById(req, res, next) {
         try {
             const { id } = req.params;
@@ -50,9 +41,6 @@ export default {
             next(error);
         }
     },
-
-    
-    // UPDATE
     
     async update(req, res, next) {
         try {
@@ -72,9 +60,6 @@ export default {
         }
     },
 
-    
-    // DELETE
-    
     async delete(req, res, next) {
         try {
             const { id } = req.params;

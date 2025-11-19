@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from "zod"
 
-const OrderStatusEnum = z.enum(["pending", "approved", "rejected", "completed"]);
+const OrderStatusEnum = z.enum(["pending", "approved", "rejected", "completed"])
 
 export const createOrderSchema = z.object({
     vehicleId: z.string().uuid(),
     userId: z.string().uuid(),
-    startDate: z.coerce.date(),
-    endDate: z.coerce.date(),
+    startDate: z.coerce.date("startDate noto'g'ri formatda"),
+    endDate: z.coerce.date("endDate noto'g'ri formatda"),
     totalAmount: z.number().positive(),
     currency: z.enum(["USD", "EUR", "UZS"]).default("USD"),
     status: OrderStatusEnum.default("pending"),
@@ -16,10 +16,10 @@ export const createOrderSchema = z.object({
         message: "endDate startDate dan keyin bo'lishi shart",
         path: ["endDate"],
     }
-);
+)
 
 export const updateOrderSchema = z.object({
-    startDate: z.   coerce.date().optional(),
+    startDate: z.coerce.date().optional(),
     endDate: z.coerce.date().optional(),
     totalAmount: z.number().positive().optional(),
     currency: z.enum(["USD", "EUR", "UZS"]).optional(),
@@ -31,4 +31,4 @@ export const updateOrderSchema = z.object({
         message: "endDate startDate dan keyin bo'lishi shart",
         path: ["endDate"],
     }
-);
+)

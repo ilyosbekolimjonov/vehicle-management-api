@@ -1,23 +1,60 @@
-import db from "../db/knex.js";
+import knex from "../db/knex.js"
 
 export const ReportService = {
-    async createReport(data) {
-        return await db("reports").insert(data).returning("*");
+    async create(data) {
+        const { vehicleId, title, description } = data
+
+        const vehicle = await knex("vehicles").where({ id: vehicleId }).first()
+        if (!vehicle) throw new Error("Vehicle topilmadi")
+
+        const report = await knex("reports")
+            .insert({
+                vehicleId,
+                title,
+                description
+            })
+            .returning("*")
+
+        return report
     },
-    
-    async getReports() {
-        return await db("reports").select("*");
+
+    async getAll() {
+        return await knex("reports")
+            .select("*")
+            .orderBy("created_at", "desc")
     },
-    
-    async getReportById(id) {
-        return await db("reports").where({ id }).first();
+
+    async getById(id) {
+        const report = await knex("reports").where({ id }).first()
+        if (!report) throw new Error(404, "Report topilmadi")
+        return report
     },
-    
-    async updateReport(id, data) {
-        return await db("reports").where({ id }).update(data).returning("*");
+
+    async update(id, data) {
+        const report = await knex("reports").where({ id }).first()
+        if (!report) throw new Error(404, "Report topilmadi")
+
+        if (data.vehicleId) {
+            const vehicle = await knex("vehicles")
+                .where({ id: data.vehicleId })
+                .first()
+            if (!vehicle) throw new Error(404, "Vehicle topilmadi")
+        }
+
+        const [updated] = await knex("reports")
+            .where({ id })
+            .update(data)
+            .returning("*")
+
+        return updated
     },
-    
-    async deleteReport(id) {
-        return await db("reports").where({ id }).delete();
-    },
+
+    async delete(id) {
+        const report = await knex("reports").where({ id }).first()
+        if (!report) throw new Error(404, "Report topilmadi")
+
+        await knex("reports").where({ id }).del()
+
+        return { message: "Report o‘chirildi" }
+    }
 }

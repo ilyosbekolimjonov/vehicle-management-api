@@ -8,15 +8,7 @@ export const UserService = {
         const [{ count }] = await db("users").count("* as count")
 
         const users = await db("users")
-            .select(
-                "id",
-                "username",
-                "email",
-                "role",
-                "status",
-                "created_at",
-                "updated_at"
-            )
+            .select("id", "username", "email", "role", "status", "created_at", "updated_at")
             .limit(take)
             .offset(offset)
 

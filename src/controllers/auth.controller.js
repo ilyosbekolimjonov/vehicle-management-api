@@ -1,10 +1,11 @@
 import * as authService from "../services/auth.service.js"
-import { verifyOtpSchema, resendOtpSchema } from "../validations/auth.validation.js"
+import { verifyOtpSchema, resendOtpSchema, registerUserSchema } from "../validations/auth.validation.js"
 
 export const AuthController = {
     async register(req, res, next) {
         try {
-            const result = await authService.register(req.body)
+            const validated = registerUserSchema.parse(req.body)
+            const result = await authService.register(validated)
             res.status(201).json({
                 message: "User registered. OTP sent to email.",
                 data: result,

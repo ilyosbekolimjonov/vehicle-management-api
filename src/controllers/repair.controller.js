@@ -1,15 +1,11 @@
 import { RepairService }  from "../services/repair.service.js";
-
-import {
-    createRepairSchema,
-    updateRepairSchema
-} from "../validations/repair.validation.js";
+import { createRepairSchema, updateRepairSchema } from "../validations/repair.validation.js";
 
 export const RepairController = {
     async addRepair(req, res, next){
         try {
             const validated = createRepairSchema.parse(req.body);
-            const [repair] = await RepairService.create(validated);
+            const repair = await RepairService.create(validated);
     
             res.status(201).json({
                 success: true,

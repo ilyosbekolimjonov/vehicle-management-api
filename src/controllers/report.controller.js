@@ -1,12 +1,11 @@
 import { ReportService } from "../services/report.service.js"
-
 import { createReportSchema, updateReportSchema } from "../validations/report.validation.js"
 
 export const ReportController = {
     async addReport(req, res, next){
         try {
             const validated = createReportSchema.parse(req.body)
-            const [report] = await ReportService.createReport(validated)
+            const report = await ReportService.create(validated)
     
             res.status(201).json({
                 success: true,
@@ -19,7 +18,7 @@ export const ReportController = {
     
     async getAllReports(req, res, next){
         try {
-            const reports = await ReportService.getReports()
+            const reports = await ReportService.getAll()
             res.json({ success: true, data: reports })
         } catch (error) {
             next(error)
@@ -30,7 +29,7 @@ export const ReportController = {
         try {
             const { id } = req.params
     
-            const report = await ReportService.getReportById(id)
+            const report = await ReportService.getById(id)
             if (!report) return res.status(404).json({ message: "Report topilmadi" })
     
             res.json({ success: true, data: report })
@@ -44,7 +43,7 @@ export const ReportController = {
             const validated = updateReportSchema.parse(req.body)
             const { id } = req.params
     
-            const [updated] = await ReportService.updateReport(id, validated)
+            const updated = await ReportService.update(id, validated)
             if (!updated) return res.status(404).json({ message: "Report topilmadi" })
     
             res.json({ success: true, data: updated })
@@ -56,7 +55,7 @@ export const ReportController = {
     async removeReport(req, res, next){
         try {
             const { id } = req.params
-            const count = await ReportService.deleteReport(id)
+            const count = await ReportService.delete(id)
     
             if (!count) return res.status(404).json({ message: "Report topilmadi" })
     

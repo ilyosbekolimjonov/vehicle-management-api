@@ -19,7 +19,7 @@ export const createOrderSchema = z.object({
 );
 
 export const updateOrderSchema = z.object({
-    startDate: z.coerce.date().optional(),
+    startDate: z.   coerce.date().optional(),
     endDate: z.coerce.date().optional(),
     totalAmount: z.number().positive().optional(),
     currency: z.enum(["USD", "EUR", "UZS"]).optional(),

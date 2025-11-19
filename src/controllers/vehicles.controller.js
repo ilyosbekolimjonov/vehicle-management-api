@@ -1,11 +1,11 @@
 import { VehiclesService } from "../services/vehicles.service.js"
+import { createVehicleSchema, updateVehicleSchema } from "../validations/vehicles.validation.js"
 
 export const VehiclesController = {
     async create(req, res, next) {
         try {
-            const data = req.body
-
-            const vehicle = await VehiclesService.create(data)
+            const validated = createVehicleSchema.params(req.body)
+            const vehicle = await VehiclesService.create(validated)
 
             return res.status(201).json({
                 success: true,
@@ -55,9 +55,8 @@ export const VehiclesController = {
     async update(req, res, next) {
         try {
             const { id } = req.params
-            const data = req.body
-
-            const updated = await VehiclesService.update(id, data)
+            const validated = updateVehicleSchema.params(req.body)
+            const updated = await VehiclesService.update(id, validated)
 
             if (!updated) {
                 return res.status(404).json({

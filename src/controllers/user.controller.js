@@ -4,11 +4,17 @@ import { updateUserSchema } from "../validations/user.validation.js"
 export const UserController = {
     async getAllUsers(req, res, next) {
         try {
-            const users = await UserService.getUsers()
+            const { page: page, limit: limit } = req.query;
+
+            const result = await UserService.getUsers(page, limit);
+
             res.json({
                 success: true,
-                data: users
-            })
+                page: result.page,
+                limit: result.limit,
+                total: result.total,
+                data: result.data
+            });
         } catch (error) {
             next(error)
         }
@@ -37,24 +43,24 @@ export const UserController = {
 
     async editUser(req, res, next) {
         try {
-            const validated = updateUserSchema.parse(req.body)
-            const { id } = req.params
+            const validated = updateUserSchema.parse(req.body);
+            const { id } = req.params;
 
-            const [updated] = await UserService.updateUser(id, validated)
+            const updated = await UserService.updateUser(id, validated);
 
             if (!updated) {
                 return res.status(404).json({
                     success: false,
                     message: "Foydalanuvchi topilmadi"
-                })
+                });
             }
 
             res.json({
                 success: true,
                 data: updated
-            })
+            });
         } catch (error) {
-            next(error)
+            next(error);
         }
     },
 

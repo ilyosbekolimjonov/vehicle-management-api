@@ -1,18 +1,12 @@
 import { Router } from "express";
-import {
-    addReport,
-    getAllReports,
-    getSingleReport,
-    editReport,
-    removeReport,
-} from "../controllers/report.controller.js";
+import { ReportController } from "../controllers/report.controller.js";
 
 const router = Router();
 
-router.post("/", addReport);
-router.get("/", getAllReports);
-router.get("/:id", getSingleReport);
-router.put("/:id", editReport);
-router.delete("/:id", removeReport);
+router.post("/", ReportController.addReport);
+router.get("/", ReportController.getAllReports);
+router.get("/:id", ReportController.getSingleReport);
+router.put("/:id", ReportController.editReport);
+router.delete("/:id", ReportController.removeReport);
 
 export { router as reportRouter };

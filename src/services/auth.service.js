@@ -37,7 +37,6 @@ export async function register({ email, username, password, role }) {
     return { userId: user.id };
 }
 
-
 export async function verifyOtp({ email, code }) {
     // 1. User exists?
     const user = await knex("users").where({ email }).first();
@@ -73,7 +72,6 @@ export async function verifyOtp({ email, code }) {
     return { success: true };
 }
 
-
 export async function resendOtp({ email }) {
     // 1. User exists?
     const user = await knex("users").where({ email }).first();
@@ -96,7 +94,6 @@ export async function resendOtp({ email }) {
 
     return { success: true };
 }
-
 
 export async function login({ email, password }) {
     // 1. User check
@@ -139,7 +136,6 @@ export async function myProfile(userId) {
 
     return user;
 }
-
 
 export async function refreshToken(refreshToken) {
     if (!refreshToken) {

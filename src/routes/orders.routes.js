@@ -1,13 +1,13 @@
 import { Router } from "express";
 import orderController from "../controllers/order.controller.js";
-import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { authGuard } from "../middlewares/guard.middleware.js";
 
 const router = Router();
 
-router.post("/", authMiddleware, orderController.create);
-router.get("/", authMiddleware, orderController.getAll);
-router.get("/:id", authMiddleware, orderController.getById);
-router.put("/:id", authMiddleware, orderController.update);
-router.delete("/:id", authMiddleware, orderController.delete);
+router.post("/", authGuard, orderController.create);
+router.get("/", authGuard, orderController.getAll);
+router.get("/:id", authGuard, orderController.getById);
+router.put("/:id", authGuard, orderController.update);
+router.delete("/:id", authGuard, orderController.delete);
 
 export { router as orderRouter };

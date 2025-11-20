@@ -1,22 +1,22 @@
-import knex from "../db/knex.js";
+import knex from "../db/knex.js"
 
 export const RepairService = {
     async create(data) {
-        const { vehicleId, description, cost, date, status } = data;
+        const { vehicleId, description, cost, date, status } = data
 
-        const vehicle = await knex("vehicles").where({ id: vehicleId }).first();
-        if (!vehicle) throw new Error(404, "Vehicle topilmadi");
+        const vehicle = await knex("vehicles").where({ id: vehicleId }).first()
+        if (!vehicle) throw new Error("Vehicle topilmadi")
 
         const activeRepair = await knex("repairs")
             .where({ vehicleId })
             .andWhere((qb) => {
                 qb.where("status", "pending")
-                    .orWhere("status", "in_progress");
+                    .orWhere("status", "in_progress")
             })
-            .first();
+            .first()
 
         if (activeRepair) {
-            throw new Error(400, "Bu transport hozirda ta'mir jarayonida");
+            throw new Error("Bu transport hozirda ta'mir jarayonida")
         }
 
         const [repair] = await knex("repairs")
@@ -27,54 +27,54 @@ export const RepairService = {
                 date,
                 status
             })
-            .returning("*");
+            .returning("*")
 
-        return repair;
+        return repair
     },
 
     async getAll() {
-        return await knex("repairs").select("*");
+        return await knex("repairs").select("*")
     },
 
     async getById(id) {
-        const repair = await knex("repairs").where({ id }).first();
-        if (!repair) throw new Error(404, "Repair topilmadi");
-        return repair;
+        const repair = await knex("repairs").where({ id }).first()
+        if (!repair) throw new Error("Repair topilmadi")
+        return repair
     },
 
     async update(id, data) {
-        const repair = await knex("repairs").where({ id }).first();
-        if (!repair) throw new Error(404, "Repair topilmadi");
+        const repair = await knex("repairs").where({ id }).first()
+        if (!repair) throw new Error("Repair topilmadi")
 
         if (data.status) {
             const allowed = {
                 pending: ["in_progress"],
                 in_progress: ["completed"],
                 completed: []
-            };
+            }
 
             if (!allowed[repair.status].includes(data.status)) {
                 throw new Error(
                     400,
                     `Statusni '${repair.status}' dan '${data.status}' ga o‘zgartirib bo‘lmaydi`
-                );
+                )
             }
         }
 
         const [updated] = await knex("repairs")
             .where({ id })
             .update(data)
-            .returning("*");
+            .returning("*")
 
-        return updated;
+        return updated
     },
    
     async delete(id) {
-        const repair = await knex("repairs").where({ id }).first();
-        if (!repair) throw new Error(404, "Repair topilmadi");
+        const repair = await knex("repairs").where({ id }).first()
+        if (!repair) throw new Error("Repair topilmadi")
 
-        await knex("repairs").where({ id }).del();
+        await knex("repairs").where({ id }).del()
 
-        return { message: "Repair o‘chirildi" };
+        return { message: "Repair o'chirildi" }
     }
-};
+}

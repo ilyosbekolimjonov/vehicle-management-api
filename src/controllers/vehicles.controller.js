@@ -4,7 +4,7 @@ import { createVehicleSchema, updateVehicleSchema } from "../validations/vehicle
 export const VehiclesController = {
     async create(req, res, next) {
         try {
-            const validated = createVehicleSchema.params(req.body)
+            const validated = createVehicleSchema.parse(req.body)
             const vehicle = await VehiclesService.create(validated)
 
             return res.status(201).json({
@@ -55,7 +55,7 @@ export const VehiclesController = {
     async update(req, res, next) {
         try {
             const { id } = req.params
-            const validated = updateVehicleSchema.params(req.body)
+            const validated = updateVehicleSchema.parse(req.body)
             const updated = await VehiclesService.update(id, validated)
 
             if (!updated) {
